@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		
+		<!-- mybatis cache 사용여부 false -->
+		<setting name="cacheEnabled" value="false" />
+
+		<!-- mybatis로 넘어오는 parameter가 null인 경우, jdbcType을 "NULL"로 Setting -->
+		<setting name="jdbcTypeForNull" value="NULL" /> 
+	</settings>
+
+	<!-- 매핑 파일에서 반복적으로 사용될 패키지 -->
+	<typeAliases>
+		<package name="com.me.domain" />
+	</typeAliases>
+
+</configuration>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.mapper.AdminMemberMapper">
+
+<!-- 검색 조건을 나타내는 쿼리 조각 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				AND user_name LIKE CONCAT('%', CONCAT(#{keyword},
+				'%'))
+			</if>
+			<if test="searchType == 'c'.toString()">
+				AND user_level LIKE CONCAT('%', CONCAT(#{keyword},
+				'%'))
+			</if>
+			<if test="searchType == 'w'.toString()">
+				AND user_gender LIKE CONCAT('%', CONCAT(#{keyword},
+				'%'))
+			</if>
+		</if>
+	</sql>
+	<sql id="total_list">
+		<if test="searchType == null">
+			and rnum between #{sizePerPage}*#{page}-9 and
+			#{sizePerPage}*#{page}
+		</if>
+	</sql>
+	
+	<!-- 등록 처리 -->
+	<insert id="create">
+		INSERT INTO member
+		(
+		user_no,				<!-- 회원번호_pk -->
+		user_level,				<!-- 회원등급 -->
+		user_id,				<!-- 아이디 -->
+		user_pw,				<!-- 비밀번호 -->
+		user_name,				<!-- 이름 -->
+		user_gender,			<!-- 성별 -->
+		user_year,				<!-- 생년월일 년도 -->
+		user_month,				<!-- 생년월일 월 -->
+		user_day,				<!-- 생년월일 일 -->
+		user_pnum1,				<!-- 핸드폰 번호 1 -->
+		user_pnum2,				<!-- 핸드폰 번호 2 -->
+		user_pnum3,				<!-- 핸드폰 번호 3 -->
+		user_emailid,			<!-- 이메일 -->
+		user_emailsite,			<!-- 이메일2 -->
+		user_postcode,			<!-- 주소(우편번호) -->
+		user_address1,			<!-- 주소(상세주소)1 -->
+		user_address2,			<!-- 주소(상세주소)2 -->
+		agree_ad				<!-- 광고동의여부 -->
+		)
+		VALUES
+		(
+		member_seq.NEXTVAL,		<!-- 회원번호_pk -->
+		#{userLevel},			<!-- 회원등급 -->
+		#{userId},				<!-- 아이디 -->
+		#{userPw},				<!-- 비밀번호 -->
+		#{userName},			<!-- 이름 -->
+		#{userGender},			<!-- 성별 -->
+		#{userYear},			<!-- 생년월일 년도 -->
+		#{userMonth},			<!-- 생년월일 월 -->
+		#{userDay},				<!-- 생년월일 일 -->
+		#{userPnum1},			<!-- 핸드폰 번호 1 -->
+		#{userPnum2},			<!-- 핸드폰 번호 2 -->
+		#{userPnum3},			<!-- 핸드폰 번호 3 -->
+		#{userEmailid},			<!-- 이메일 -->
+		#{userEmailsite},		<!-- 이메일2 -->
+		#{userPostcode},		<!-- 주소(우편번호) -->
+		#{userAddress1},		<!-- 주소(상세주소)1 -->
+		#{userAddress2},		<!-- 주소(상세주소)2 -->
+		#{agreeAd}				<!-- 광고동의여부 -->
+		)
+	</insert>
+
+	<!-- 목록 조회 -->
+	<!-- <select id="list" resultType="AdminMember">
+		SELECT
+		user_no,				회원번호_pk
+		user_level,				회원등급
+		user_id,				아이디
+		user_pw,				비밀번호
+		user_name,				이름
+		user_gender,			성별
+		user_year,				생년월일 년도
+		user_month,				생년월일 월
+		user_day,				생년월일 일
+		user_pnum1,				핸드폰 번호 1
+		user_pnum2,				핸드폰 번호 2
+		user_pnum3,				핸드폰 번호 3
+		user_emailid,			이메일
+		user_emailsite,			이메일2
+		user_postcode,			주소(우편번호)
+		user_address1,			주소(상세주소)1
+		user_address2,			주소(상세주소)2
+		agree_ad,				광고동의여부
+		reg_date				등록일
+		FROM member
+		ORDER BY user_no ASC, reg_date ASC
+	</select> -->
+	
+<!-- 페이징 요청 정보를 매개 변수로 받아 페이징 처리를 한 게시글 목록을 조회한다. -->
+	<!-- 검색 조건을 추가 -->
+	<select id="list" resultType="AdminMember">
+	<![CDATA[
+		SELECT
+		user_no,
+		user_level,
+		user_id,
+		user_pw,
+		user_name,
+		user_gender,
+		user_year,
+		user_month,
+		user_day,
+		user_pnum1,
+		user_pnum2,
+		user_pnum3,
+		user_emailid,
+		user_emailsite,
+		user_postcode,
+		user_address1,
+		user_address2,
+		agree_ad,
+		reg_date
+		FROM (select user_no, user_level, user_id, user_pw, user_name, user_gender, user_year, user_month,
+		user_day, user_pnum1, user_pnum2, user_pnum3, user_emailid, user_emailsite, user_postcode,
+		user_address1, user_address2, agree_ad, reg_date, rownum as rnum
+		from member) where user_no > 0
+		]]>
+
+		<include refid="total_list"></include>
+		<include refid="search"></include>
+		
+		<![CDATA[
+		ORDER BY user_no DESC, reg_date DESC
+		]]>
+	</select>
+	
+	<!-- 상세 조회 -->
+	<select id="read" resultType="AdminMember">
+		SELECT
+		user_no,				<!-- 회원번호_pk -->
+		user_level,				<!-- 회원등급 -->
+		user_id,				<!-- 아이디 -->
+		user_pw,				<!-- 비밀번호 -->
+		user_name,				<!-- 이름 -->
+		user_gender,			<!-- 성별 -->
+		user_year,				<!-- 생년월일 년도 -->
+		user_month,				<!-- 생년월일 월 -->
+		user_day,				<!-- 생년월일 일 -->
+		user_pnum1,				<!-- 핸드폰 번호 1 -->
+		user_pnum2,				<!-- 핸드폰 번호 2 -->
+		user_pnum3,				<!-- 핸드폰 번호 3 -->
+		user_emailid,			<!-- 이메일 -->
+		user_emailsite,			<!-- 이메일2 -->
+		user_postcode,			<!-- 주소(우편번호) -->
+		user_address1,			<!-- 주소(상세주소)1 -->
+		user_address2,			<!-- 주소(상세주소)2 -->
+		agree_ad,				<!-- 광고동의여부 -->
+		reg_date				<!-- 등록일 -->
+		FROM member
+		WHERE user_no = #{userNo}
+	</select>
+
+	<!-- 수정 처리 -->
+	<update id="update">
+		UPDATE member
+		SET
+		user_level= #{userLevel},			<!-- 회원등급 -->
+		user_id= #{userId},					<!-- 아이디 -->
+		user_pw= #{userPw},					<!-- 비밀번호 -->
+		user_name= #{userName},				<!-- 이름 -->
+		user_gender= #{userGender},			<!-- 성별 -->
+		user_year= #{userYear},				<!-- 생년월일 년도 -->
+		user_month= #{userMonth},			<!-- 생년월일 월 -->
+		user_day= #{userDay},				<!-- 생년월일 일 -->
+		user_pnum1= #{userPnum1},			<!-- 핸드폰 번호 1 -->
+		user_pnum2= #{userPnum2},			<!-- 핸드폰 번호 2 -->
+		user_pnum3= #{userPnum3},			<!-- 핸드폰 번호 3 -->
+		user_emailid= #{userEmailid},		<!-- 이메일 -->
+		user_emailsite= #{userEmailsite},	<!-- 이메일2 -->
+		user_postcode= #{userPostcode},		<!-- 주소(우편번호) -->
+		user_address1= #{userAddress1},		<!-- 주소(상세주소)1 -->
+		user_address2= #{userAddress2},		<!-- 주소(상세주소)2 -->
+		agree_ad= #{agreeAd},				<!-- 광고동의여부 -->
+		WHERE user_no = #{userNo}
+	</update>
+
+	<!-- 삭제 처리 -->
+	<delete id="delete">
+		DELETE FROM member
+		WHERE user_no = #{userNo}
+	</delete>
+	
+	<!-- 게시글 전체 건수를 조회한다. -->
+	<!-- 검색 조건을 추가한다. -->
+	<select id="count" resultType="int">
+	<![CDATA[
+	SELECT count(user_no)
+	FROM member
+	WHERE user_no > 0
+	]]>
+		<include refid="search"></include>
+	</select>
+</mapper>

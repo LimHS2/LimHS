@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.mapper.ShowMapper">
+
+	<!-- 검색 조건을 나타내는 쿼리 조각 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				AND show_name LIKE CONCAT('%', CONCAT(#{keyword},
+				'%'))
+			</if>
+		</if>
+	</sql>
+	<sql id="total_list">
+		<if test="searchType == null">
+			and rnum between #{sizePerPage}*#{page}-9 and
+			#{sizePerPage}*#{page}
+		</if>
+	</sql>
+	
+	<!-- 등록 처리 -->
+	<insert id="create">
+		INSERT INTO show
+		(
+		show_num,
+		show_name,
+		show_place,
+		show_round,
+		show_date,
+		show_cast,
+		show_num_of_cast,
+		show_attachments,
+		show_reservations,
+		show_runtime,
+		show_capacity,
+		show_total_reservations
+		)
+		VALUES
+		(
+		show_seq.NEXTVAL,
+		#{showName},
+		#{showPlace},
+		#{showRound},
+		#{showDate},
+		#{showCast},
+		#{showNumOfCast},
+		#{showAttachments},
+		#{showReservations},
+		#{showRuntime},
+		#{showCapacity},
+		#{showTotalReservations}
+		)
+	</insert>
+	
+	<!-- 페이징 요청 정보를 매개 변수로 받아 페이징 처리를 한 게시글 목록을 조회한다. -->
+	<!-- 검색 조건을 추가 -->
+	<select id="list" resultType="Show">
+	<![CDATA[
+		SELECT
+		show_num,
+		show_name,
+		show_place,
+		show_round,
+		show_date,
+		show_cast,
+		show_num_of_cast,
+		show_attachments,
+		show_reservations,
+		show_runtime,
+		show_capacity,
+		show_total_reservations
+		FROM (select show_num, show_name, show_place, show_round, show_date, show_cast, show_num_of_cast,
+		show_attachments, show_reservations, show_runtime, show_capacity, show_total_reservations, rownum as rnum
+		from Show) where show_num > 0
+		]]>
+
+		<include refid="total_list"></include>
+		<include refid="search"></include>
+		
+		<![CDATA[
+		ORDER BY show_num DESC
+		]]>
+	</select>
+
+	<!-- 상세 보기 -->
+	<select id="read" resultType="Show">
+		SELECT show_num,
+		show_name,
+		show_place,
+		show_round,
+		show_date,
+		show_cast,
+		show_num_of_cast,
+		show_attachments,
+		show_reservations,
+		show_runtime,
+		show_capacity,
+		show_total_reservations
+		FROM show
+		WHERE show_num = #{show.showNum, jdbcType = NUMERIC}<!-- , jdbcType = NUMERIC -->
+	</select>
+
+	<!-- 첨부파일명 -->
+	<select id="getShowFile" resultType="String">
+		SELECT show_attachments
+		FROM
+		show
+		WHERE show_num = #{showNum}
+	</select>
+	
+	<!-- 게시글 전체 건수를 조회한다. -->
+	<!-- 검색 조건을 추가한다. -->
+	<select id="count" resultType="int">
+	<![CDATA[
+	SELECT count(show_num)
+	FROM show
+	WHERE show_num > 0
+	]]>
+		<include refid="search"></include>
+	</select>
+</mapper>

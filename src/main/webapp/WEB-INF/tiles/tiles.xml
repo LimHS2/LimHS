@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="main-template"
+		template="/WEB-INF/tiles/user/layouts/main_template.jsp">
+		<put-attribute name="title" value="Main" />
+		<put-attribute name="header"
+			value="/WEB-INF/tiles/user/components/main/header.jsp" />
+		<put-attribute name="menu"
+			value="/WEB-INF/tiles/user/components/main/menu.jsp" />
+		<put-attribute name="footer"
+			value="/WEB-INF/tiles/user/components/main/footer.jsp" />
+	</definition>
+	<definition name="home" extends="main-template">
+		<put-attribute name="title" value="Home" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/home.jsp" />
+	</definition>
+
+
+
+	<!-- 로그인 페이지 템플릿 -->
+	<definition name="login-template"
+		template="/WEB-INF/tiles/login/layouts/common_template.jsp">
+		<put-attribute name="title" value="LoginPage" />
+		<put-attribute name="header"
+			value="/WEB-INF/tiles/login/components/common/header.jsp" />
+	</definition>
+
+	<!-- 회원 페이지 -->
+	<definition name="join/*" extends="login-template">
+		<put-attribute name="title" value="Join" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/join/{1}.jsp" />
+	</definition>
+
+	<!-- 로그인 페이지 -->
+	<definition name="auth/*" extends="login-template">
+		<put-attribute name="title" value="Login" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/auth/{1}.jsp" />
+	</definition>
+
+	<!-- 에러 페이지 -->
+	<definition name="error/*" extends="common-template">
+		<put-attribute name="title" value="Error" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/error/{1}.jsp" />
+	</definition>
+
+	<!-- common 템플릿 -->
+	<definition name="common-template"
+		template="/WEB-INF/tiles/user/layouts/common_template.jsp">
+		<put-attribute name="header"
+			value="/WEB-INF/tiles/user/components/common/header.jsp" />
+		<put-attribute name="menu"
+			value="/WEB-INF/tiles/user/components/common/menu.jsp" />
+		<put-attribute name="footer"
+			value="/WEB-INF/tiles/user/components/common/footer.jsp" />
+	</definition>
+
+	<!-- 극단 소개 -->
+	<definition name="/client/greeting/*"
+		extends="common-template"> <!-- main-template 둘중하나 -->
+		<put-attribute name="content"
+			value="/WEB-INF/views/client/greeting/{1}.jsp" />
+	</definition>
+
+	<definition name="/client/troupInfo/*"
+		extends="common-template">
+		<put-attribute name="content"
+			value="/WEB-INF/views/client/troupInfo/{1}.jsp" />
+	</definition>
+
+	<!-- 공연 -->
+
+	<definition name="show/*" extends="common-template">
+		<put-attribute name="content"
+			value="/WEB-INF/views/show/{1}.jsp" />
+	</definition>
+
+	<definition name="book/*" extends="common-template">
+		<put-attribute name="content"
+			value="/WEB-INF/views/show/{1}.jsp" />
+	</definition>
+	
+	<!-- 배우지원 -->
+	<definition name="userapply/*" extends="common-template">
+		<put-attribute name="content"
+			value="/WEB-INF/views/userApply/{1}.jsp" />
+	</definition>
+
+	<!-- 배우지원 수업리스트 -->
+	<definition name="userclassgroup/*" extends="common-template">
+		<put-attribute name="content"
+			value="/WEB-INF/views/userclassgroup/{1}.jsp" />
+	</definition>
+	
+	<!-- 공지사항 -->
+	<definition name="userNotice/*" extends="common-template">
+		<put-attribute name="content"
+			value="/WEB-INF/views/userNotice/{1}.jsp" />
+	</definition>
+	
+	<!-- 관리자 페이지 -->
+	<definition name="adminMain-template"
+		template="/WEB-INF/tiles/admin/layouts/adminMain_template.jsp">
+		<put-attribute name="title" value="Main" />
+		<put-attribute name="header"
+			value="/WEB-INF/tiles/admin/components/main/header.jsp" />
+		<put-attribute name="menu"
+			value="/WEB-INF/tiles/admin/components/main/menu.jsp" />
+		<put-attribute name="footer"
+			value="/WEB-INF/tiles/admin/components/main/footer.jsp" />
+	</definition>
+
+	<definition name="me" extends="adminMain-template">
+		<put-attribute name="title" value="Home" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/me.jsp" />
+	</definition>
+
+	<!-- 수업 관리 페이지에 대한 레이아웃 템플릿 구성요소 정의 -->
+	<definition name="admin/classgroup/*"
+		extends="adminMain-template">
+		<put-attribute name="title" value="ClassGroup" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/classgroup/{1}.jsp" />
+	</definition>
+
+	<!-- 공지사항 페이지에 대한 레이아웃 템플릿 구성 요소를 정의 -->
+	<definition name="admin/adminNotice/*"
+		extends="adminMain-template">
+		<put-attribute name="title" value="AdminNotice" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/adminNotice/{1}.jsp" />
+	</definition>
+
+	<!-- 문의사항 페이지에 대한 레이아웃 템플릿 구성 요소를 정의 -->
+	<definition name="admin/adminInquiry/*"
+		extends="adminMain-template">
+		<put-attribute name="title" value="AdminInquiry" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/adminInquiry/{1}.jsp" />
+	</definition>
+
+	<!-- 공연 관리 페이지에 대한 레이아웃 템플릿 구성요소 정의 -->
+	<definition name="admin/adminshow/*"
+		extends="adminMain-template">
+		<put-attribute name="title" value="AdminShow" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/adminshow/{1}.jsp" />
+	</definition>
+
+	<!-- 회원 조회 페이지에 대한 레이아웃 템플릿 구성요소 정의 -->
+	<definition name="admin/adminmember/*"
+		extends="adminMain-template">
+		<put-attribute name="title" value="AdminMember" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/adminmember/{1}.jsp" />
+	</definition>
+	
+	<!-- 관리자 수강신청현황 -->
+	<definition name="admin/adminapply/*" extends="adminMain-template">
+		<put-attribute name="title" value="AdminApply" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/adminapply/{1}.jsp" />
+	</definition>
+	
+	<!-- footer부분 이용약관, 개인정보처리방침, 오시는길 -->
+	<definition name="/footer/*" extends="main-template">
+		<put-attribute name="content"
+			value="/WEB-INF/views/footer/{1}.jsp" />
+	</definition>
+
+</tiles-definitions>

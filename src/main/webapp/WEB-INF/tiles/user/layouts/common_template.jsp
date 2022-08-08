@@ -1,0 +1,72 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tiles Layout</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+#container {
+	width: 100%;
+	margin: 0px auto;
+	text-align: center;
+	border: 0px solid #bcbcbc;
+}
+
+#header {
+	/* border: 0px solid #bcbcbc; */
+	border: 0px solid #0d6efd;
+}
+
+#content {
+	width: 100%;
+	float: center;
+	border: 0px solid #bcbcbc;
+	margin-bottom: 50px;
+	margin-top: 20px;
+	
+}
+
+#sidebar-left {
+	width: 10%;
+	height: 1300px;
+	padding: 0;
+	margin-right: 5px;
+	float: left;
+	background-color: #dcdcdc;
+	border: 0px solid #bcbcbc;
+	font-size: 10px;
+}
+
+#footer {
+	clear: both;
+	padding: 2px;
+	border: 0px solid #bcbcbc;
+	background-color: #e7e7e7;
+}
+</style>
+</head>
+<body>
+
+	<div id="header">
+		<tiles:insertAttribute name="header" />
+	</div>
+
+	<div id="sidebar-left">
+		<tiles:insertAttribute name="menu" />
+	</div>
+
+	<div id="content">
+		<tiles:insertAttribute name="content" />
+	</div>
+
+	<div id="footer">
+		<tiles:insertAttribute name="footer" />
+	</div>
+
+
+</body>
+</html>

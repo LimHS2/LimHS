@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.mapper.UserApplyMapper">
+	<!-- 등록 처리 -->
+	<insert id="create">
+		INSERT INTO apply
+		(
+		apply_num,						<!-- 지원번호_pk -->
+		apply_gisu,						<!-- 기수 -->
+		apply_registration_date,		<!-- 수강신청 날짜 -->
+		apply_refund_request_date,		<!-- 환불신청 날짜 -->
+		apply_attendance_status,		<!-- 수강현황 -->
+		apply_attachments,				<!-- 첨부파일명 -->
+		apply_stage_experience,			<!-- 무대경험 -->
+		apply_about_s_e,				<!-- 무대경험 있음 -->
+		apply_self_introduction,		<!-- 자기소개 -->
+		
+		apply_user_no, 					<!-- 회원_회원번호 -->
+		apply_user_name,				<!-- 회원_이름 -->
+		apply_user_gender,				<!-- 회원_성별 -->
+		apply_user_year,				<!-- 회원_생년월일 년도 -->
+		apply_user_month,				<!-- 회원_생년월일 월 -->
+		apply_user_day,					<!-- 회원_생년월일 일 -->
+		apply_user_pnum1,				<!-- 회원_핸드폰 번호 1 -->
+		apply_user_pnum2,				<!-- 회원_핸드폰 번호 2 -->
+		apply_user_pnum3,				<!-- 회원_핸드폰 번호 3 -->
+		apply_user_emailid,				<!-- 회원_이메일 -->
+		apply_user_emailsite,			<!-- 회원_이메일2 -->
+		apply_user_postcode,			<!-- 회원_주소(우편번호) -->
+		apply_user_address1,			<!-- 회원_주소(상세주소)1 -->
+		apply_user_address2,			<!-- 회원_주소(상세주소)2 -->
+		
+		apply_class_num,				<!-- 수업_수업번호 -->
+		apply_class_name,				<!-- 수업_수업명 -->
+		apply_class_period,				<!-- 수업_수업기간 -->
+		apply_class_regist_recruitment	<!-- 수업_모집현황 -->
+		)
+		VALUES
+		(
+		apply_seq.NEXTVAL,				<!-- 지원번호_pk -->
+		#{applyGisu},					<!-- 기수 -->
+		#{applyRegistrationDate},		<!-- 수강신청 날짜 -->
+		#{applyRefundRequestDate},		<!-- 환불신청 날짜 -->
+		#{applyAttendanceStatus},		<!-- 수강현황 -->
+		#{applyAttachments},			<!-- 첨부파일 -->
+		#{applyStageExperience},		<!-- 무대경험 -->
+		#{applyAboutSE},				<!-- 무대경험 있음 -->
+		#{applySelfIntroduction},		<!-- 자기소개 -->
+		
+		#{applyUserNo},					<!-- 회원_회원번호 -->
+		#{applyUserName},				<!-- 회원_이름 -->
+		#{applyUserGender},				<!-- 회원_성별 -->
+		#{applyUserYear},				<!-- 회원_생년월일 년도 -->
+		#{applyUserMonth},				<!-- 회원_생년월일 월 -->
+		#{applyUserDay},				<!-- 회원_생년월일 일 -->
+		#{applyUserPnum1},				<!-- 회원_핸드폰번호1 -->
+		#{applyUserPnum2},				<!-- 회원_핸드폰번호2 -->
+		#{applyUserPnum3},				<!-- 회원_핸드폰번호3 -->
+		#{applyUserEmailid},			<!-- 회원_이메일 -->
+		#{applyUserEmailsite},			<!-- 회원_이메일2 -->
+		#{applyUserPostcode},			<!-- 회원_주소(우편번호) -->
+		#{applyUserAddress1},			<!-- 회원_주소(상세주소)1 -->
+		#{applyUserAddress2},			<!-- 회원_주소(상세주소)2 -->
+	
+		#{applyClassNum},				<!-- 수업_수업번호 -->
+		#{applyClassName},				<!-- 수업_수업명 -->
+		#{applyClassPeriod},			<!-- 수업_수업기간 -->
+		#{applyClassRegistRecruitment}	<!-- 수업_모집현황 -->
+		)
+	</insert>
+	
+	<!-- 첨부파일명 -->
+	<select id = "getApplyFile" resultType="String">
+		SELECT apply_attachments
+		FROM apply
+		WHERE apply_num = #{applyNum}
+	</select>
+	
+	<!-- 목록 조회 -->
+	<select id="list" resultType = "UserApply">
+		SELECT 
+				m.user_no,						<!-- member.회원번호_pk -->
+				m.user_name,					<!-- member.이름 -->
+				m.user_gender,					<!-- member.성별 -->
+				m.user_year,					<!-- member.생년월일 년도 -->
+				m.user_month,					<!-- member.생년월일 월 -->
+				m.user_day,						<!-- member.생년월일 일 -->
+				m.user_pnum1,					<!-- member.휴대폰번호 -->
+				m.user_pnum2,					<!-- member.휴대폰번호 -->
+				m.user_pnum3,					<!-- member.휴대폰번호 -->
+				m.user_emailid,					<!-- member.이메일 -->
+				m.user_emailsite,				<!-- member.이메일2 -->
+				m.user_postcode,				<!-- member.주소(우편번호) -->
+				m.user_address1,				<!-- member.주소(상세주소)1 -->
+				m.user_address2,				<!-- member.주소(상세주소)2 -->
+				a.apply_gisu,					<!-- apply.지원기수 -->
+				a.apply_attendance_status,		<!-- apply.수강현황 -->
+				a.apply_num,					<!-- apply.지원번호_pk -->
+				a.apply_registration_date,		<!-- apply.수강신청 날짜 -->
+				a.apply_refund_request_date,	<!-- apply.환불신청 날짜 -->
+				c.class_num,					<!-- clsss_group.수업번호 -->
+				c.class_name,					<!-- clsss_group.수업명 -->
+				c.class_period,					<!-- clsss_group.수업기간 -->
+				c.class_regist_recruitment		<!-- clsss_group.모집현황 -->
+		FROM apply a 
+			FULL OUTER JOIN member m
+			ON a.user_no = m.user_no
+			FULL OUTER JOIN class_group c
+			ON a.class_num = c.class_num
+		WHERE apply_attendance_status IS NOT NULL
+		ORDER BY apply_num ASC
+	</select>
+	
+</mapper>
